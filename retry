@@ -1,0 +1,107 @@
+Creating a web application with Express.js to meet these requirements involves several steps. Here's a step-by-step guide with explanations to help you build this application:
+
+Step 1: Set Up Your Project
+
+Create a new directory for your project and navigate to it using your terminal or command prompt.
+
+Initialize a Node.js project using the following command:
+
+npm init
+Follow the prompts to set up your project, or you can simply press Enter to accept the default options.
+
+Install the Express.js framework as a project dependency:
+
+css
+Copy code
+npm install express --save
+Step 2: Create the Application Structure
+
+Inside your project directory, create a directory named "views" to store your HTML templates. You will create separate HTML files for the Home page, Our Services, and Contact us.
+
+Create an "index.html" file in the "views" directory for the Home page. Add the HTML structure and content you want.
+
+Create "services.html" and "contact.html" files in the "views" directory for the Our Services and Contact us pages, respectively. Add the HTML structure and content to these files.
+
+Step 3: Set Up the Express Application
+
+Create an Express application and set up your routes in an "app.js" or "server.js" file. You can use the following code as a starting point:
+
+javascript
+Copy code
+const express = require('express');
+const app = express();
+
+// Define middleware to serve static files (e.g., styles, scripts, images).
+app.use(express.static('public'));
+
+// Define a custom middleware to check working hours.
+app.use((req, res, next) => {
+const now = new Date();
+const dayOfWeek = now.getDay(); // 0 (Sunday) to 6 (Saturday)
+const hourOfDay = now.getHours();
+const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5; // Monday to Friday
+const isWorkingHours = isWeekday && hourOfDay >= 9 && hourOfDay <= 17; // 9 AM to 5 PM
+
+if (isWorkingHours) {
+next(); // Continue processing the request
+} else {
+res.send('This service is only available during working hours (Monday to Friday, 9 AM to 5 PM).');
+}
+});
+
+// Define routes for the Home, Services, and Contact pages.
+app.get('/', (req, res) => {
+res.sendFile(\_\_dirname + '/views/index.html');
+});
+
+app.get('/services', (req, res) => {
+res.sendFile(\_\_dirname + '/views/services.html');
+});
+
+app.get('/contact', (req, res) => {
+res.sendFile(\_\_dirname + '/views/contact.html');
+});
+
+// Start the server on port 3000.
+app.listen(3000, () => {
+console.log('Server is running on port 3000');
+});
+In this code:
+
+We require the Express module and create an Express application.
+We set up middleware to serve static files (e.g., CSS, JavaScript, images) from a "public" directory.
+We define custom middleware to check if the current time falls within working hours (Monday to Friday, 9 AM to 5 PM).
+We create routes for the Home, Services, and Contact pages, serving the HTML files from the "views" directory.
+We start the server on port 3000.
+Step 4: Run Your Application
+
+Start your Express application by running the following command in your project directory:
+
+Copy code
+node app.js
+You can access your application in a web browser by visiting http://localhost:3000. Make sure to test it during working hours (Monday to Friday, 9 AM to 5 PM) to verify that it's available only during that time.
+
+Step 5: Add Navigation Links
+
+In your HTML templates (index.html, services.html, contact.html), add navigation links in the navigation bar. For example:
+
+html
+Copy code
+
+<nav>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/services">Our Services</a></li>
+    <li><a href="/contact">Contact us</a></li>
+  </ul>
+</nav>
+Step 6: Customize Content
+
+Customize the content in your HTML templates to include the desired information for the Home, Services, and Contact pages.
+Step 7: Styling (Optional)
+
+If you want to style your pages, create CSS files and place them in the "public" directory.
+
+Link your CSS files in the HTML templates using the <link> tag in the <head> section.
+
+That's it! You've created a web application with Express.js that includes three pages, navigation links, and a restriction to working hours. You can further enhance your application by adding more routes, dynamic data, and additional functionality as needed.
